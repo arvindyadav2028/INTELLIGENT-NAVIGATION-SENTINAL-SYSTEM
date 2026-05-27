@@ -1,0 +1,76 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: 
+    linear-gradient(135deg, rgba(255,153,51,0.15), rgba(255,204,102,0.15)),
+    url("mahakumbh.png") center/cover no-repeat;
+  background-attachment: fixed;
+
+  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  color: #2c3e50;
+}
+
+.container {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 40px 60px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(255, 153, 51, 0.4);
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: #cc0000;
+  text-shadow: 1px 1px 4px rgba(255, 204, 102, 0.6);
+}
+
+/* Majestic Button (unchanged) */
+.person {
+  padding: 12px 30px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #f9fafa;
+  /* background-color: rgba(255, 255, 255, 0.8); */
+  background-color: #b34d00;
+  cursor: pointer;
+  border: 3px solid transparent;
+  border-radius: 50px;
+  box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+a.person:hover {
+  background: #cc6600;
+  box-shadow: 0 0 15px 8px rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+a {
+  text-decoration: none;
+  padding: 14px 28px;
+  margin: 0 20px;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: #b34700;
+  color: #fffaf0;
+  transition: 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+a:hover {
+  background: #e67300;
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  transform: translateY(-3px);
+}
+
+.mahakumbh-tag {
+  margin-top: 25px;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #5c3d00;
+}
