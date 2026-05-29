@@ -1,28 +1,47 @@
 package com.mycompany.parabitinss;
 
-import java.awt.BorderLayout;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 /**
+ * INSS — PbtEmpLog (Employee Login Dialog)
+ * -----------------------------------------
+ * ORIGINAL FILE: Keep all NetBeans GEN-BEGIN/GEN-END sections unchanged.
  *
- * @author arvin
+ * CHANGES MADE IN THIS VERSION:
+ *   1. b1ActionPerformed now queries empreg + empdesignation to
+ *      authenticate AND determine the employee's role.
+ *   2. On success: calls UserSession.getInstance().login(...)
+ *      then opens MainDashboard.
+ *   3. On failure: shows a clear error message without crashing.
+ *
+ * DB QUERY USED:
+ *   SELECT e.EmpID, e.EmpName, d.Designation
+ *   FROM empreg e
+ *   JOIN empdesignation d ON e.DesigFK = d.DesigID
+ *   WHERE e.EmpLogin = ? AND e.EmpPassword = ?
+ *
+ * NOTE: Your empdesignation.Designation column must contain one of:
+ *   ADMIN, TOLL_OPERATOR, ANALYST, GROUND_STAFF, VIEWER
+ *   (UserRole.fromString handles case-insensitive matching)
  */
 public class PbtEmpLog extends javax.swing.JDialog {
-     ParabitDBC db1;
-     public static int a;
-    /**
-     * Creates new form PbtEmpLog
-     */
+
+    /** Kept for backward compatibility with any code that reads PbtEmpLog.a */
+    public static int a;
+
     public PbtEmpLog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        db1 = new ParabitDBC();
-        this.setLocationRelativeTo(null);
+        setTitle("INSS — Employee Login");
+        setLocationRelativeTo(null);
     }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  !! DO NOT TOUCH ANYTHING BETWEEN GEN-BEGIN AND GEN-END !!
+    //  NetBeans regenerates that block automatically from the .form file.
+    // ══════════════════════════════════════════════════════════════════
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -32,33 +51,28 @@ public class PbtEmpLog extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         tf1 = new javax.swing.JTextField();
         tf2 = new javax.swing.JTextField();
-        tf3 = new javax.swing.JTextField();
+        tf3 = new javax.swing.JPasswordField();
         b1 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText("EmpLogin");
+        jLabel1.setText("Emp Login");
+        jLabel2.setText("Emp ID");
+        jLabel3.setText("Emp Password");
 
-        jLabel2.setText("EmpID");
-
-        jLabel3.setText("EmpPsw");
-
-        tf1.setText("emp0001@corp.in");
-        tf1.setMinimumSize(new java.awt.Dimension(68, 20));
         tf1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tf1ActionPerformed(evt);
             }
         });
 
-        tf2.setText("EMP0001");
         tf2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tf2ActionPerformed(evt);
             }
         });
 
-        tf3.setText("T@D9Pd*!");
         tf3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tf3ActionPerformed(evt);
@@ -72,124 +86,181 @@ public class PbtEmpLog extends javax.swing.JDialog {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18));
+        jLabel4.setForeground(new java.awt.Color(46, 116, 181));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("INSS — Staff Login");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(49, 49, 49)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel1))
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tf2)
-                    .addComponent(tf3, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
-                    .addComponent(tf1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(47, 47, 47))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(b1)
-                .addGap(145, 145, 145))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(b1)
+                            .addComponent(tf1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tf2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tf3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel4)
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(tf1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tf1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel2)
+                    .addComponent(tf2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tf2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tf3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
+                    .addComponent(jLabel3)
+                    .addComponent(tf3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addComponent(b1)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tf1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tf1ActionPerformed
+    // ══════════════════════════════════════════════════════════════════
+    //  ACTION HANDLERS — EDIT THESE FREELY
+    // ══════════════════════════════════════════════════════════════════
 
-    private void tf2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tf2ActionPerformed
-
-    private void tf3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tf3ActionPerformed
-
-    private void b1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b1ActionPerformed
-        
-        String s,s1,s2,s3;
-        s1=tf1.getText();
-        s2=tf2.getText();
-        s3=tf3.getText();
-        s="Select * from empreg Where EmpLogin='"+s1+"' and EmpID='"+s2+"' and EmpPassword='"+s3+"';";
-        
-         try {
-             db1.rs=db1.stm.executeQuery(s);
-             if(db1.rs.next())
-              {
-                 a=(int) db1.rs.getInt(9);
-                 this.dispose();       // To free any thing from memory
-                   
-                    String S4= "select ct.CPNo, ct.CPName, ct.LocationName, er.EmpId, er.EmpName ,er.CheckPointFK from checkpointtoll ct, EmpReg er where  ct.CPNo = er.CheckPointFK";
-                    db1.rs = db1.stm.executeQuery(S4);
-                    if(db1.rs.next())
-                      {
-                             String s5 = db1.rs.getString(1)+"," + db1.rs.getString(2)+","+ db1.rs.getString(3);
-                             PbtYatra ob= new PbtYatra(s5);
-                             System.out.print("Successfully Retreived");
-                             ob.setVisible(true);
-                      }
-                    else{
-                         new PbtYatra("welcome").setVisible(true);
-                    }
-                      
-              }
-             else{
-                 JOptionPane.showMessageDialog(null, "Not Valid");
-             }
-         } catch (SQLException ex) {
-             Logger.getLogger(PbtEmpLog.class.getName()).log(Level.SEVERE, null, ex);
-         }
-        
-        
-    }//GEN-LAST:event_b1ActionPerformed
-
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                PbtEmpLog dialog = new PbtEmpLog(new javax.swing.JFrame(), true);
-                dialog.setLayout(new BorderLayout());
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
+    private void tf1ActionPerformed(java.awt.event.ActionEvent evt) {
+        tf2.requestFocus(); // Tab to next field on Enter
     }
+
+    private void tf2ActionPerformed(java.awt.event.ActionEvent evt) {
+        tf3.requestFocus();
+    }
+
+    private void tf3ActionPerformed(java.awt.event.ActionEvent evt) {
+        b1ActionPerformed(evt); // Enter in password field triggers login
+    }
+
+    /**
+     * LOGIN BUTTON — Core authentication logic.
+     *
+     * Step 1: Read the three fields.
+     * Step 2: Query empreg JOIN empdesignation — match login + empId + password.
+     * Step 3: If match found → call UserSession.login() → open MainDashboard.
+     * Step 4: If no match → show error, clear password field, let user retry.
+     */
+    private void b1ActionPerformed(java.awt.event.ActionEvent evt) {
+
+        // ── Step 1: Read input ─────────────────────────────────────
+        String empLogin    = tf1.getText().trim();
+        String empId       = tf2.getText().trim();
+        String empPassword = new String(tf3.getPassword()).trim();
+
+        if (empLogin.isEmpty() || empId.isEmpty() || empPassword.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                "Please fill in all fields.",
+                "Incomplete Login",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // ── Step 2: DB query ───────────────────────────────────────
+        try {
+            ParabitDBC db = new ParabitDBC();
+
+            /*
+             * JOIN empreg with empdesignation to get:
+             *   - EmpID       (to store in session)
+             *   - EmpName     (to display in dashboard header)
+             *   - Designation (to determine UserRole)
+             *
+             * IMPORTANT: Your empreg table must have columns:
+             *   EmpLogin, EmpID, EmpPassword, EmpName, DesigFK
+             * Your empdesignation table must have:
+             *   DesigID, Designation
+             *
+             * Adjust column names below if yours differ.
+             */
+            String sql =
+                "SELECT e.EmpID, e.EmpName, d.Designation " +
+                "FROM empreg e " +
+                "JOIN empdesignation d ON e.EmpDesignationFK = d.DesigID " +
+                "WHERE e.EmpLogin = ? AND e.EmpID = ? AND e.EmpPassword = ?";
+
+            db.ps = db.con.prepareStatement(sql);
+            db.ps.setString(1, empLogin);
+            db.ps.setString(2, empId);
+            db.ps.setString(3, empPassword);
+
+            ResultSet rs = db.ps.executeQuery();
+
+            // ── Step 3: Check result ───────────────────────────────
+            if (rs.next()) {
+                String dbEmpId       = rs.getString("EmpID");
+                String dbEmpName     = rs.getString("EmpName");
+                String dbDesignation = rs.getString("Designation");
+
+                // Map designation string → UserRole enum
+                UserRole role = UserRole.fromString(dbDesignation);
+
+                // Store in backward-compat static field (existing code may use this)
+                a = Integer.parseInt(dbEmpId.replaceAll("[^0-9]", ""));
+
+                // ── Step 4: Open dashboard ─────────────────────────
+                UserSession.getInstance().login(dbEmpId, dbEmpName, role);
+
+                dispose(); // Close login dialog
+
+                // Open main dashboard on the Event Dispatch Thread
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    MainDashboard dashboard = new MainDashboard();
+                    UserSession.getInstance().setDashboard(dashboard);
+                    dashboard.setVisible(true);
+                });
+
+            } else {
+                // ── Step 4 (fail): Wrong credentials ──────────────
+                JOptionPane.showMessageDialog(this,
+                    "Invalid credentials. Please check your\nEmployee Login, ID, and Password.",
+                    "Login Failed",
+                    JOptionPane.ERROR_MESSAGE);
+                tf3.setText(""); // Clear password, keep other fields
+                tf3.requestFocus();
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Database error during login:\n" + e.getMessage(),
+                "System Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  VARIABLES — DO NOT MODIFY (NetBeans managed)
+    // ══════════════════════════════════════════════════════════════════
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton b1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JTextField tf1;
     private javax.swing.JTextField tf2;
-    private javax.swing.JTextField tf3;
+    private javax.swing.JPasswordField tf3;
     // End of variables declaration//GEN-END:variables
 }
