@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Person Registration</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="person.css" />
+  </head>
+  <body>
+    <h2>Mahakumbh Person Registration</h2>
+
+    <form
+      id="personForm"
+      enctype="multipart/form-data"
+      method="POST"
+      action="http://localhost:3000/insert-person"
+    >
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" name="Name" required />
+        </div>
+
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" name="StateFK" />
+        </div>
+
+        <div class="form-group">
+          <label>Mobile</label>
+          <input type="text" name="MobNo" />
+        </div>
+
+        <div class="form-group">
+          <label>LandMark</label>
+          <input type="text" name="Landmark" />
+        </div>
+
+        <div class="form-group">
+          <label>Aadhar Number</label>
+          <input type="text" name="AadharNo" />
+        </div>
+
+        <div class="form-group">
+          <label>Police Station</label>
+          <input type="text" name="PoliceStation" />
+        </div>
+
+        <div class="form-group">
+          <label>Gender</label>
+          <input type="text" name="Gender" />
+        </div>
+
+        <div class="form-group">
+          <label>Panchayat Number</label>
+          <input type="text" name="PanchyatNo" />
+        </div>
+
+        <div class="form-group">
+          <label>Nationality</label>
+          <input type="text" name="Nationality" />
+        </div>
+
+        <div class="form-group">
+          <label>Identification Mark</label>
+          <input type="text" name="IdentificationMark" />
+        </div>
+
+        <div class="form-group">
+          <label>Emergency Mobile</label>
+          <input type="text" name="EmergencyMob" />
+        </div>
+
+        <div class="form-group">
+          <label>Travelling Date</label>
+          <input type="date" name="TravellingDate" />
+        </div>
+
+        <div class="form-group">
+          <label>Mode Of Transport</label>
+          <input type="text" name="ModeOfTransport" />
+        </div>
+
+        <div class="form-group">
+          <label>Return Date</label>
+          <input type="date" name="ReturnDate" />
+        </div>
+
+        <div class="form-group">
+          <label>Transport Number</label>
+          <input type="text" name="TransportNo" />
+        </div>
+
+        <div class="form-group">
+          <label>Other Destination</label>
+          <input type="text" name="ReturnType" />
+        </div>
+
+        <div class="form-group">
+          <label>House Number</label>
+          <input type="text" name="HouseNo" />
+        </div>
+
+        <div class="form-group">
+          <label>Accommodation Type</label>
+          <input type="text" name="ATypeFK" />
+        </div>
+
+        <div class="form-group">
+          <label>Colony</label>
+          <input type="text" name="Colony" />
+        </div>
+
+        <div class="form-group">
+          <label>Reg Type</label>
+          <input type="text" name="RegTypeFK" />
+        </div>
+
+        <div class="form-group">
+          <label>Town/City</label>
+          <input type="text" name="TownCity" />
+        </div>
+
+        <div class="form-group">
+          <label>Tahsil</label>
+          <input type="text" name="Tehsil" />
+        </div>
+
+        <div class="form-group">
+          <label>Block</label>
+          <input type="text" name="Block" />
+        </div>
+
+        <div class="form-group">
+          <label>District</label>
+          <input type="text" name="District" />
+        </div>
+
+        <div class="form-group">
+          <label>Pincode</label>
+          <input type="text" name="Pincode" />
+        </div>
+
+        <div class="form-group full-width">
+          <label>Photo</label>
+          <input type="file" name="Photo" accept="image/*" required />
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+      </div>
+    </form>
+
+    <script>
+      document.getElementById("personForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+          
+          //: Capturing Form Data
+          const form = this;
+          //FormData automatically collects all the inputs (like Name, Mobile, Aadhar, etc.) and even the photo file.
+          // //This gives us a ready-made object to send to the server without manually reading each field.
+          const formData = new FormData(form);
+
+          //If the user says OK, we treat this as a group registration.
+
+          const addMore = confirm(
+            "Group will be created with this member. Do you want to add more members to this group?"
+          );
+          formData.append("isNewGroup", addMore ? "true" : "false");
+          if (!addMore) {
+            formData.append("GroupID", "");
+          }
+          //fetch() is used here instead of a normal form post.
+          //It allows asynchronous communication with the server — meaning the page won’t reload, it just quietly sends the data.
+          //  //We send formData directly as the request body.
+
+          fetch("http://localhost:3000/insert-person", {
+            method: "POST",
+            body: formData,
+          })
+            //jab server rply kar de tab usko jason mai bana do
+            .then((res) => res.json())
+            .then((response) => {
+              console.log("Server Response:", response);
+
+              //If it’s a group, the server sends back a Group ID.
+              //We also save common details (State, PoliceStation, Address, etc.) in localStorage so the next members don’t have to retype them.
+              //  //Finally, the page redirects to add_members.html, where more members can be added using that Group ID.
+
+              if (addMore) {
+                if (response.groupId) {
+                  const commonDetails = {
+                    StateFK: formData.get("StateFK"),
+                    Landmark: formData.get("Landmark"),
+                    PoliceStation: formData.get("PoliceStation"),
+                    PanchyatNo: formData.get("PanchyatNo"),
+                    IdentificationMark: formData.get("IdentificationMark"),
+                    TravellingDate: formData.get("TravellingDate"),
+                    ReturnDate: formData.get("ReturnDate"),
+                    ReturnType: formData.get("ReturnType"),
+                    ModeOfTransport: formData.get("ModeOfTransport"),
+                    TransportNo: formData.get("TransportNo"),
+                    HouseNo: formData.get("HouseNo"),
+                    Colony: formData.get("Colony"),
+                    TownCity: formData.get("TownCity"),
+                    Tehsil: formData.get("Tehsil"),
+                    Block: formData.get("Block"),
+                    District: formData.get("District"),
+                    Pincode: formData.get("Pincode"),
+                    ATypeFK: formData.get("ATypeFK"),
+                    RegTypeFK: formData.get("RegTypeFK"),
+                    Nationality: formData.get("Nationality"),
+                    EmergencyMob: formData.get("EmergencyMob"),
+                  };
+                  localStorage.setItem(
+                    "commonDetails",
+                    JSON.stringify(commonDetails)
+                  );
+
+                  alert("Group created and first member added.");
+                  window.location.href = `add_members.html?groupId=${response.groupId}`;
+                } else {
+                  alert("Group ID not received from server. Cannot proceed.");
+                }
+              } else {
+                alert("Single person registration successful.");
+                form.reset();
+              }
+            })
+            .catch((err) => {
+              console.error("Error:", err);
+              alert("Error inserting data");
+            });
+        });
+    </script>
+  </body>
+</html>

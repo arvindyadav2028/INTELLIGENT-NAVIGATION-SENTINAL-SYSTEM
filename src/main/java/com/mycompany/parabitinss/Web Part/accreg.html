@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Accommodation Registration</title>
+  <link rel="stylesheet" href="accreg.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="title">
+      <h1>Accommodation Registration</h1>
+    </div>
+    <p class="subtitle">Fill in the details below</p>
+
+    <!-- Important: add enctype for file uploads -->
+    <form class="card" enctype="multipart/form-data">
+      <div class="grid">
+        <label>Owner Aadhaar <input type="text" name="OwnerAddhar" /></label>
+        <label>Owner Name <input type="text" name="OwnerName" /></label>
+        <label>Reg Mobile No1 <input type="tel" name="RegMobNo1" /></label>
+        <label>Reg Mobile No2 <input type="tel" name="RegMobNo2" /></label>
+        <label>CareTaker Aadhaar <input type="text" name="CareTakerAddhar" /></label>
+        <label>CareTaker Name <input type="text" name="CareTakerName" /></label>
+        <label>CareTaker Mob1 <input type="tel" name="CareTakerMob1" /></label>
+        <label>CareTaker Mob2 <input type="tel" name="CareTakerMob2" /></label>
+        <label>Samagra ID <input type="text" name="SamagraID" /></label>
+        <label>Family Samagra ID <input type="text" name="FSamagraID" /></label>
+        <label>Accommodation Name <input type="text" name="AccName" /></label>
+        <label>Plot No <input type="text" name="PlotNo" /></label>
+        <label>Street <input type="text" name="Street" /></label>
+        <label>Colony <input type="text" name="Colony" /></label>
+        <label>Landmark <input type="text" name="Landmark" /></label>
+        <label>City <input type="text" name="City" /></label>
+        <label>District <input type="text" name="District" /></label>
+        <label>Block <input type="text" name="Block" /></label>
+        <label>Latitude <input type="text" name="Lattitude" /></label>
+        <label>Longitude <input type="text" name="Longitude" /></label>
+        <label>Pincode <input type="text" name="Pincode" /></label>
+        <label>Email <input type="email" name="Email" /></label>
+        <label>Password <input type="password" name="Password" /></label>
+        <label>Distance From MainGhat <input type="text" name="DistanceFromGZ" /></label>
+        <label>Capacity <input type="text" name="Capacity" /></label>
+        <label>ChargeType <input type="text" name="ChargeType" /></label>
+      </div>
+
+      <div class="grid">
+        <label>Image1 <input type="file" name="image1" /></label>
+        <label>Image2 <input type="file" name="image2" /></label>
+        <label>Image3 <input type="file" name="image3" /></label>
+        <label>Image4 <input type="file" name="image4" /></label>
+        <label>Image5 <input type="file" name="image5" /></label>
+      </div>
+
+      <div class="grid">
+        <label>ZoneFK <input type="text" name="ZoneFK" /></label>
+        <label>CircleFK <input type="text" name="CircleFK" /></label>
+      </div>
+
+      <label class="otp">OTPSMS <input type="text" name="OTPSMS" /></label>
+      <button type="submit" class="btn">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.querySelector(".card");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form); // includes files & text
+
+        try {
+          let response = await fetch("http://localhost:3000/registerAccommodation", {
+            method: "POST",
+            body: formData
+          });
+
+          let result = await response.json();
+          alert(result.message || "Error occurred");
+        } catch (err) {
+          console.error("Request failed:", err);
+          alert("Failed to connect to server");
+        }
+      });
+    });
+  </script>
+</body>
+</html>

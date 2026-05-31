@@ -1,0 +1,128 @@
+/* ===== General Page Setup ===== */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: 
+    linear-gradient(135deg, rgba(51,146,255,0.5), rgba(255,204,102,0.6)),
+    url("regimg1.png") center/cover no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+/* ===== Form Container ===== */
+form {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  max-width: 1300px;
+  width: 100%;
+}
+
+/* ===== Title ===== */
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 25px;
+  color: #333;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+}
+
+/* ===== Grid Layout for Form Fields ===== */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Default: 4 columns on big screens */
+  gap: 15px;
+}@media (max-width: 1024px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  form {
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  button {
+    width: 100%; /* full width buttons on mobile */
+    margin: 8px 0;
+  }
+}
+/* Label + Input pair */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: #444;
+}
+
+.form-group input {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
+  border-color: #cc6600;
+  box-shadow: 0 0 5px rgba(204,102,0,0.5);
+  outline: none;
+}
+
+/* ===== File Upload ===== */
+input[type="file"] {
+  border: none;
+  background: #fff6f0;
+  cursor: pointer;
+  padding: 6px;
+}
+
+/* ===== Buttons ===== */
+.form-actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+button {
+  background: #997300;
+  color: #fff3e0;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+button:hover {
+  background: #cc6600;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+
+label{
+  color: black;
+}

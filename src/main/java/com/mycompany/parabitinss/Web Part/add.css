@@ -1,0 +1,124 @@
+/* General Page Styling */
+body {
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #fff8e7, #fbe8d3);
+  color: #333;
+}
+
+/* Title */
+h2 {
+  text-align: center;
+  color: #8b4513;
+  text-shadow: 0 0 5px rgba(255, 200, 100, 0.5);
+  margin-bottom: 10px;
+}
+
+p {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+/* Form Styling */
+form {
+  display: grid;
+  gap: 15px;
+  max-width: 600px;
+  margin: 0 auto 30px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #5a2d0c;
+}
+
+form input, 
+form select {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+form input[type="file"] {
+  padding: 3px;
+}
+
+/* Buttons */
+button {
+  background: linear-gradient(45deg, #ffcc00, #ff9900);
+  color: #fff;
+  font-weight: bold;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(255, 153, 0, 0.4);
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(255, 153, 0, 0.6);
+}
+
+/* Table Styling */
+table {
+  width: 80%; /* makes table wider */
+  margin: 20px auto; /* centers it */
+  border-collapse: collapse;
+  font-size: 1.2rem; /* larger text */
+  background: rgba(255, 255, 255, 0.9); 
+  box-shadow: 0 0 20px rgba(255, 200, 100, 0.6);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 18px 25px; /* increases cell size */
+  text-align: center;
+  border: 1px solid #e0c97f;
+}
+
+th {
+  background: linear-gradient(90deg, #ffcc70, #ff8c00);
+  color: white;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+tr:nth-child(even) {
+  background: #fff8e7;
+}
+
+
+tr:hover {
+  background: #fff7e6;
+}
+
+td img {
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+/* Final Submit Button */
+#finalSubmit {
+  display: block;
+  margin: 30px auto;
+  background: linear-gradient(45deg, #28a745, #218838);
+  box-shadow: 0 4px 12px rgba(0, 150, 50, 0.4);
+}
+
+#finalSubmit:hover {
+  box-shadow: 0 6px 20px rgba(0, 150, 50, 0.6);
+}

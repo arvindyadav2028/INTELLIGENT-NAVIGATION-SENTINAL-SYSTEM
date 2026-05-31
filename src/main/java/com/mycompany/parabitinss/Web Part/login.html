@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email & Password Validator</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <h1 >Login to register the accomodation facility for the Event</h1>
+  <div class="container">
+    <h2>Login Form</h2>
+    <form id="loginForm">
+      <div class="form-control">
+        <label for="email" >Email:</label>
+        <input type="text" id="email" placeholder="Enter your email" autocomplete="off">
+        <small class="error-message"></small>
+      </div>
+      
+
+      <div class="form-control">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Enter your password">
+        <small class="error-message"></small>
+        <div class="register-link">
+    <a href="accreg.html">Don’t have an account? Register</a>
+  </div>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>

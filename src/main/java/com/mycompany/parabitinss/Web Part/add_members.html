@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Members</title>
+     <link rel="stylesheet" href="add.css">
+</head>
+<body>
+    <h2>Add More Members</h2>
+    <p>Group ID: <span id="groupIdDisplay"></span></p>
+
+    <form id="memberForm" enctype="multipart/form-data">
+        <label>Name: <input type="text" name="Name" required></label>
+        <label>Mobile: <input type="text" name="MobNo" required></label>
+        <label>Aadhaar: <input type="text" name="AadharNo" required></label>
+        <label>Gender:
+            <select name="Gender" required> 
+                <option value="Male">Male</option>
+                <option value="Female">Female</option> 
+                <option value="Others">Others</option> 
+            </select>
+        </label>
+        <label>Age: <input type="number" name="Age" required></label>
+        <label>Photo: <input type="file" name="Photo" accept="image/*" required></label>
+
+        <button type="submit">Add Member</button>
+    </form>
+
+    <h3>Members List</h3>
+    <table id="membersTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Mobile</th>
+                <th>Aadhaar</th>
+                <th>Gender</th>
+                <th>Age</th>
+                <th>Photo</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <br>
+    <button id="finalSubmit">Submit All</button>
+
+<script>
+    //JavaScript, window.location represents the current page URL.
+    //URLSearchParams is a built-in helper that makes it easy to extract values.
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const groupId = urlParams.get('groupId');
+    if (groupId) {
+        document.getElementById('groupIdDisplay').textContent = groupId;
+    }
+
+    // Temporary storage for members
+    let membersList = [];
+
+    document.getElementById('memberForm').addEventListener('submit', function(e) {
+        e.preventDefault();//Prevents page refresh
+
+        const formData = new FormData(this);
+        //object creation for each member
+        const member = {
+            Name: formData.get('Name'),
+            MobNo: formData.get('MobNo'),
+            AadharNo: formData.get('AadharNo'),
+            Gender: formData.get('Gender'),
+            Age: formData.get('Age'),
+            GroupID: groupId
+        };
+
+        const photoFile = formData.get('Photo');
+        //URL.createObjectURL() generates a preview so we can show the photo in the table immediately.
+        if (photoFile && photoFile.size > 0) {
+            member.Photo = URL.createObjectURL(photoFile); // for preview
+            member._rawPhoto = photoFile; // keep original file for upload
+        }
+
+        membersList.push(member);
+
+        const tableBody = document.querySelector('#membersTable tbody');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>${member.Name}</td>
+            <td>${member.MobNo}</td>
+            <td>${member.AadharNo}</td>
+            <td>${member.Gender}</td>
+            <td>${member.Age}</td>
+            <td>${member.Photo ? `<img src="${member.Photo}" width="50">` : ''}</td>
+        `;
+        tableBody.appendChild(newRow);
+
+        this.reset();
+    });
+
+    document.getElementById('finalSubmit').addEventListener('click', function() {
+        if (membersList.length === 0) {
+            alert("No members to submit!");
+            return;
+        }
+        //Then retrieves common details (like Address, District, etc.) from localStorage that were saved earlier in the group creation step.
+        const commonDetails = localStorage.getItem("commonDetails");
+        if (!commonDetails) {
+            alert("Common details not found. Please start registration again.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('GroupID', groupId);
+        formData.append('commonDetails', commonDetails);
+
+        membersList.forEach((member, index) => {
+            formData.append(`members[${index}][Name]`, member.Name);
+            formData.append(`members[${index}][MobNo]`, member.MobNo);
+            formData.append(`members[${index}][AadharNo]`, member.AadharNo);
+            formData.append(`members[${index}][Gender]`, member.Gender);
+            formData.append(`members[${index}][Age]`, member.Age);
+            if (member._rawPhoto) {
+                formData.append(`members[${index}][Photo]`, member._rawPhoto);
+            }
+        });
+        
+        // ===================================================================
+        // ▼ CRUCIAL DEBUGGING STEP ▼
+        // This will show you exactly what is being sent to the server.
+        // ===================================================================
+        console.log("--- Preparing to send the following data ---");
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+        // ===================================================================
+
+        fetch('http://localhost:3000/insert-person', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(response => {
+            if (response.error) {
+                alert("Error: " + response.error);
+            } else {
+                alert("All members inserted successfully!");
+                membersList = []; // clear temp array
+                document.querySelector('#membersTable tbody').innerHTML = ""; // clear table
+                localStorage.removeItem("commonDetails"); 
+            }
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            alert('Failed to submit members');
+        });
+    });
+</script>
+
+</body>
+</html>
