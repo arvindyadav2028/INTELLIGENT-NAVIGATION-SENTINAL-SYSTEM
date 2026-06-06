@@ -37,6 +37,11 @@ public class PbtEmpLog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }
 
+    // ══════════════════════════════════════════════════════════════════
+    //  !! DO NOT TOUCH ANYTHING BETWEEN GEN-BEGIN AND GEN-END !!
+    //  NetBeans regenerates that block automatically from the .form file.
+    // ══════════════════════════════════════════════════════════════════
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -131,6 +136,10 @@ public class PbtEmpLog extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    // ══════════════════════════════════════════════════════════════════
+    //  ACTION HANDLERS — EDIT THESE FREELY
+    // ══════════════════════════════════════════════════════════════════
 
     private void tf1ActionPerformed(java.awt.event.ActionEvent evt) {
         tf2.requestFocus(); // Tab to next field on Enter
@@ -239,6 +248,10 @@ public class PbtEmpLog extends javax.swing.JDialog {
             e.printStackTrace();
         }
     }
+
+    // ══════════════════════════════════════════════════════════════════
+    //  VARIABLES — DO NOT MODIFY (NetBeans managed)
+    // ══════════════════════════════════════════════════════════════════
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton b1;
